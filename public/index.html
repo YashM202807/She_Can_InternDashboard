@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Portal - Advanced Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+            --border-radius: 10px;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: var(--light-color);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        /* Login Section Styles */
+        .login-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-hover);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            animation: fadeInUp 0.8s ease;
+            transition: var(--transition);
+        }
+        body.dark-mode .login-card {
+            background: #2c3e50;
+            color: var(--light-color);
+        }
+        .login-header {
+            margin-bottom: 30px;
+        }
+        .login-header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .login-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        body.dark-mode .form-group label {
+            color: var(--light-color);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        body.dark-mode .form-group input {
+            background: #34495e;
+            border-color: #34495e;
+            color: var(--light-color);
+        }
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        .form-group i {
+            position: absolute;
+            right: 15px;
+            top: 43px;
+            color: #7f8c8d;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        .demo-notice {
+            margin-top: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding: 10px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+        }
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .header h2 {
+            color: var(--dark-color);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        body.dark-mode .header h2 {
+            color: var(--light-color);
+        }
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--white);
+            padding: 10px 15px;
+            border-radius: 50px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        body.dark-mode .user-profile {
+            background: #34495e;
+        }
+        .profile-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: bold;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        .username {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .theme-toggle {
+            background: var(--white);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            font-size: 1.2rem;
+            color: var(--dark-color);
+        }
+        body.dark-mode .theme-toggle {
+            background: #34495e;
+            color: var(--light-color);
+        }
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+        .btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+        }
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(52, 152, 219, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        /* Stats Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            animation: fadeInUp 0.8s ease;
+        }
+        body.dark-mode .stat-card {
+            background: #34495e;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .highlight {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+        .edit-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .edit-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        /* Rewards Section */
+        .rewards {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+        body.dark-mode .rewards {
+            background: #34495e;
+        }
+        .rewards h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.dark-mode .rewards h3 {
+            color: var(--light-color);
+        }
+        .rewards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .reward-item {
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        body.dark-mode .reward-item {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        /* Current reward (green) */
+        .reward-item.current {
+            background: rgba(39, 174, 96, 0.1);
+            border-color: var(--success-color);
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.3);
+        }
+        body.dark-mode .reward-item.current {
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+        }
+        .reward-item.current .reward-icon {
+            background: var(--success-color);
+            color: var(--white);
+        }
+        .reward-item.current .reward-icon {
+            animation: pulse 2s infinite;
+        }
+        /* Past rewards (yellow) */
+        .reward-item.past {
+            background: rgba(243, 156, 18, 0.1);
+            border-color: var(--warning-color);
+        }
+        .reward-item.past .reward-icon {
+            background: var(--warning-color);
+            color: var(--white);
+        }
+        /* Default reward icon */
+        .reward-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .reward-content h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        .reward-content p {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        .next-reward {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+        body.dark-mode .next-reward {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        .next-reward h4 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 1.2rem;
+        }
+        body.dark-mode .next-reward h4 {
+            color: var(--light-color);
+        }
+        .progress-container {
+            margin-top: 15px;
+            height: 12px;
+            background-color: var(--light-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        body.dark-mode .progress-container {
+            background-color: #2c3e50;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 6px;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+        }
+        .progress-text {
+            margin-top: 10px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        body.dark-mode .progress-text {
+            color: var(--light-color);
+        }
+        /* Leaderboard */
+        .leaderboard {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        body.dark-mode .leaderboard {
+            background: #34495e;
+        }
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .leaderboard h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        body.dark-mode .leaderboard h3 {
+            color: var(--light-color);
+        }
+        .leaderboard-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            width: 200px;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        body.dark-mode .search-box input {
+            background: #2c3e50;
+            border-color: #2c3e50;
+            color: var(--light-color);
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            width: 250px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+        }
+        .sort-select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        body.dark-mode .sort-select {
+            background: #2c3e50;
+            border-color: #2c3e50;
+            color: var(--light-color);
+        }
+        .sort-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        body.dark-mode th, 
+        body.dark-mode td {
+            border-bottom-color: #34495e;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        body.dark-mode th {
+            background-color: #2c3e50;
+            color: var(--light-color);
+        }
+        tr {
+            transition: var(--transition);
+        }
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            cursor: pointer;
+        }
+        body.dark-mode tr:hover {
+            background-color: rgba(52, 152, 219, 0.2);
+        }
+        .rank-1 {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+        .rank-2 {
+            color: #95a5a6;
+            font-weight: bold;
+        }
+        .rank-3 {
+            color: #cd7f32;
+            font-weight: bold;
+        }
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .rank-1 .rank-badge {
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            color: white;
+        }
+        .rank-2 .rank-badge {
+            background: linear-gradient(45deg, #bdc3c7, #95a5a6);
+            color: white;
+        }
+        .rank-3 .rank-badge {
+            background: linear-gradient(45deg, #d35400, #cd7f32);
+            color: white;
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 550px;
+            box-shadow: var(--shadow-hover);
+            animation: slideUp 0.4s ease;
+            position: relative;
+        }
+        body.dark-mode .modal-content {
+            background: #34495e;
+        }
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        body.dark-mode .modal-header {
+            border-bottom-color: #2c3e50;
+        }
+        .modal-header h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+        }
+        body.dark-mode .modal-header h3 {
+            color: var(--light-color);
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            transition: var(--transition);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-modal:hover {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        .modal-body {
+            padding: 25px;
+        }
+        .suggestions {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .suggestion {
+            display: inline-block;
+            padding: 8px 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        body.dark-mode .suggestion {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        .suggestion:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        body.dark-mode .modal-footer {
+            border-top-color: #2c3e50;
+        }
+        .error {
+            color: var(--danger-color);
+            margin: 10px 0;
+            font-size: 0.9rem;
+            padding: 10px;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--danger-color);
+        }
+        /* Viewing Indicator */
+        .viewing-indicator {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            animation: fadeIn 0.5s ease;
+        }
+        body.dark-mode .viewing-indicator {
+            background-color: rgba(52, 152, 219, 0.2);
+        }
+        .viewing-indicator.active {
+            display: flex;
+        }
+        .viewing-text {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        body.dark-mode .viewing-text {
+            color: var(--light-color);
+        }
+        .back-btn {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-btn:hover {
+            background: var(--secondary-color);
+        }
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white);
+            color: var(--dark-color);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-hover);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+        }
+        body.dark-mode .toast {
+            background: #34495e;
+            color: var(--light-color);
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+        .toast.success .toast-icon {
+            color: var(--success-color);
+        }
+        .toast.error .toast-icon {
+            color: var(--danger-color);
+        }
+        .toast.info .toast-icon {
+            color: var(--primary-color);
+        }
+        .toast-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(39, 174, 96, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(39, 174, 96, 0);
+            }
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .rewards-list {
+                grid-template-columns: 1fr;
+            }
+            .leaderboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .search-box input {
+                width: 100%;
+            }
+            .search-box input:focus {
+                width: 100%;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 10px;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>Intern Portal</h1>
+                    <p>Advanced Dashboard for Intern Management</p>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <button id="loginBtn" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div class="demo-notice">
+                    <i class="fas fa-info-circle"></i> Use credentials from the dummy data (e.g., Yash/yash)
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Section -->
+        <div class="dashboard" id="dashboard">
+            <div class="header">
+                <h2><i class="fas fa-tachometer-alt"></i> Intern Dashboard</h2>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-profile">
+                        <div class="profile-icon" id="profileIcon">U</div>
+                        <div class="username" id="displayUsername">User</div>
+                        <button id="logoutBtn" class="btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="loadingMessage" class="loading">
+                <div class="loading-spinner"></div>
+                Loading intern data...
+            </div>
+            
+            <div id="dashboardContent" style="display: none;">
+                <div class="viewing-indicator" id="viewingIndicator">
+                    <span class="viewing-text">
+                        <i class="fas fa-eye"></i> Viewing: <span id="viewingInternName"></span>
+                    </span>
+                    <button id="backToMyStats" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back to My Stats
+                    </button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="edit-icon" id="editReferralCode">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                        <h3>Referral Code</h3>
+                        <p class="highlight" id="referralCode">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Donations Raised</h3>
+                        <p class="highlight" id="donationsRaised">$0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>University</h3>
+                        <p id="university">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rewards Unlocked</h3>
+                        <p class="highlight" id="rewardsCount">0</p>
+                    </div>
+                </div>
+                
+                <div class="rewards">
+                    <h3><i class="fas fa-trophy"></i> Rewards</h3>
+                    <div class="rewards-list" id="rewardsList">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                    <div id="nextRewardContainer" class="next-reward" style="display: none;">
+                        <h4>Next Reward</h4>
+                        <p id="nextRewardText">-</p>
+                        <div class="progress-container">
+                            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">$0 / $750</p>
+                    </div>
+                </div>
+                
+                <div class="leaderboard">
+                    <div class="leaderboard-header">
+                        <h3><i class="fas fa-medal"></i> Top Performers</h3>
+                        <div class="leaderboard-controls">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Search interns...">
+                            </div>
+                            <select id="sortSelect" class="sort-select">
+                                <option value="donations">Sort by Donations</option>
+                                <option value="name">Sort by Name</option>
+                                <option value="university">Sort by University</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id="leaderboardTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Name</th>
+                                <th>Donations</th>
+                                <th>University</th>
+                                <th>Rewards</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Referral Code Edit Modal -->
+        <div class="modal" id="referralModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-edit"></i> Change Referral Code</h3>
+                    <button class="close-modal" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Choose from available codes or enter your own:</p>
+                    
+                    <div class="suggestions" id="suggestions">
+                        <!-- Suggestions will be added here by JavaScript -->
+                    </div>
+                    
+                    <input type="text" id="newReferralCode" class="donation-input" placeholder="Enter new referral code">
+                    <div id="referralError" class="error"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelReferralCode" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button id="saveReferralCode" class="btn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toast Notification Container -->
+        <div id="toastContainer"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const loginSection = document.getElementById('loginSection');
+            const dashboard = document.getElementById('dashboard');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const displayUsername = document.getElementById('displayUsername');
+            const profileIcon = document.getElementById('profileIcon');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            const loadingMessage = document.getElementById('loadingMessage');
+            const dashboardContent = document.getElementById('dashboardContent');
+            const editReferralBtn = document.getElementById('editReferralCode');
+            const referralModal = document.getElementById('referralModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const suggestionsContainer = document.getElementById('suggestions');
+            const newReferralInput = document.getElementById('newReferralCode');
+            const saveReferralBtn = document.getElementById('saveReferralCode');
+            const cancelReferralBtn = document.getElementById('cancelReferralCode');
+            const referralError = document.getElementById('referralError');
+            
+            // Rewards progress elements
+            const nextRewardContainer = document.getElementById('nextRewardContainer');
+            const nextRewardText = document.getElementById('nextRewardText');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const rewardsCount = document.getElementById('rewardsCount');
+            
+            // Viewing indicator elements
+            const viewingIndicator = document.getElementById('viewingIndicator');
+            const viewingInternName = document.getElementById('viewingInternName');
+            const backToMyStatsBtn = document.getElementById('backToMyStats');
+            
+            // Leaderboard elements
+            const searchInput = document.getElementById('searchInput');
+            const sortSelect = document.getElementById('sortSelect');
+            
+            // Current user and viewed intern
+            let currentUser = null;
+            let viewedIntern = null;
+            let interns = [];
+            let loggedInUsername = '';
+            let isDarkMode = false;
+            
+            // API base URL
+            const API_BASE_URL = 'http://localhost:3000';
+            
+            // Event Listeners
+            loginBtn.addEventListener('click', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            themeToggle.addEventListener('click', toggleTheme);
+            editReferralBtn.addEventListener('click', showReferralModal);
+            closeModalBtn.addEventListener('click', hideReferralModal);
+            cancelReferralBtn.addEventListener('click', hideReferralModal);
+            saveReferralBtn.addEventListener('click', saveReferralCode);
+            backToMyStatsBtn.addEventListener('click', showCurrentUserStats);
+            searchInput.addEventListener('input', filterLeaderboard);
+            sortSelect.addEventListener('change', sortLeaderboard);
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                isDarkMode = true;
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Theme Toggle Function
+            function toggleTheme() {
+                isDarkMode = !isDarkMode;
+                document.body.classList.toggle('dark-mode');
+                
+                if (isDarkMode) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('darkMode', 'false');
+                }
+            }
+            
+            // Login Functions
+            async function handleLogin() {
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                if (!username || !password) {
+                    showToast('Please enter both username and password', 'error');
+                    return;
+                }
+                
+                try {
+                    // Call the login endpoint
+                    const response = await fetch(`${API_BASE_URL}/api/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Login failed');
+                    }
+                    
+                    const userData = await response.json();
+                    
+                    // Set the logged in user
+                    currentUser = userData;
+                    loggedInUsername = username;
+                    
+                    // Update profile icon with first letter of username
+                    profileIcon.textContent = username.charAt(0).toUpperCase();
+                    displayUsername.textContent = username;
+                    
+                    // Show dashboard and hide login section
+                    loginSection.style.display = 'none';
+                    dashboard.style.display = 'block';
+                    
+                    // Initialize the dashboard
+                    await initializeDashboard();
+                    
+                    showToast(`Welcome, ${username}!`, 'success');
+                } catch (error) {
+                    console.error('Login error:', error);
+                    showToast(error.message, 'error');
+                }
+            }
+            
+            function handleLogout() {
+                // Reset form
+                usernameInput.value = '';
+                passwordInput.value = '';
+                
+                // Show login section and hide dashboard
+                loginSection.style.display = 'flex';
+                dashboard.style.display = 'none';
+                
+                // Reset variables
+                loggedInUsername = '';
+                currentUser = null;
+                viewedIntern = null;
+                interns = [];
+                
+                showToast('You have been logged out', 'info');
+            }
+            
+            // Calculate rewards function (client-side version for simulator)
+            function calculateRewards(donationsRaised) {
+                let rewards = [];
+                let nextReward = null;
+                let nextRewardAmount = null;
+                
+                if (donationsRaised >= 750 && donationsRaised < 1500) {
+                    rewards = ["Starter Pack"];
+                    nextReward = "Early Access";
+                    nextRewardAmount = 1500;
+                } else if (donationsRaised >= 1500 && donationsRaised < 2250) {
+                    rewards = ["Starter Pack", "Early Access"];
+                    nextReward = "VIP Access";
+                    nextRewardAmount = 2250;
+                } else if (donationsRaised >= 2250 && donationsRaised < 3000) {
+                    rewards = ["Starter Pack", "Early Access", "VIP Access"];
+                    nextReward = "Mentorship Program";
+                    nextRewardAmount = 3000;
+                } else if (donationsRaised >= 3000) {
+                    rewards = ["Starter Pack", "Early Access", "VIP Access", "Mentorship Program"];
+                    // No next reward if they have the highest tier
+                } else {
+                    // No rewards unlocked yet
+                    nextReward = "Starter Pack";
+                    nextRewardAmount = 750;
+                }
+                
+                return {
+                    rewards: rewards,
+                    nextReward: nextReward,
+                    nextRewardAmount: nextRewardAmount
+                };
+            }
+            
+            // API Functions
+            async function fetchInterns() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/interns`);
+                    if (!response.ok) throw new Error('Failed to fetch interns');
+                    interns = await response.json();
+                    return interns;
+                } catch (error) {
+                    console.error('Error fetching interns:', error);
+                    loadingMessage.innerHTML = `
+                        <div class="loading-spinner"></div>
+                        Failed to load intern data. Please try again later.
+                    `;
+                    return [];
+                }
+            }
+            
+            async function updateReferralCode(internId, newCode) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/interns/${internId}/referral`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ referralCode: newCode })
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || 'Failed to update referral code');
+                    }
+                    
+                    const updatedIntern = await response.json();
+                    return updatedIntern;
+                } catch (error) {
+                    console.error('Update referral code error:', error);
+                    throw error;
+                }
+            }
+            
+            async function getReferralSuggestions() {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/suggest-referral`);
+                    if (!response.ok) throw new Error('Failed to get suggestions');
+                    const data = await response.json();
+                    return data.suggestions;
+                } catch (error) {
+                    console.error('Error getting suggestions:', error);
+                    return [];
+                }
+            }
+            
+            // UI Functions
+            async function initializeDashboard() {
+                // Fetch all interns for leaderboard
+                await fetchInterns();
+                
+                // Update the dashboard with the current user's data
+                updateDashboard(currentUser);
+                updateLeaderboard();
+                
+                // Hide loading message and show dashboard content
+                loadingMessage.style.display = 'none';
+                dashboardContent.style.display = 'block';
+            }
+            
+            function updateDashboard(intern) {
+                // Update the stats section with the provided intern's data
+                document.getElementById('referralCode').textContent = intern.referralCode;
+                document.getElementById('donationsRaised').textContent = `$${intern.donationsRaised.toLocaleString()}`;
+                document.getElementById('university').textContent = intern.university;
+                document.getElementById('rewardsCount').textContent = intern.rewards ? intern.rewards.length : 0;
+                
+                // Update rewards list
+                const rewardsList = document.getElementById('rewardsList');
+                rewardsList.innerHTML = '';
+                
+                // Create all possible rewards
+                const ALL_REWARDS = [
+                    { name: "Starter Pack", icon: "fas fa-gift", threshold: 750 },
+                    { name: "Early Access", icon: "fas fa-key", threshold: 1500 },
+                    { name: "VIP Access", icon: "fas fa-crown", threshold: 2250 },
+                    { name: "Mentorship Program", icon: "fas fa-user-graduate", threshold: 3000 }
+                ];
+                
+                // Determine current reward (highest unlocked)
+                let currentReward = null;
+                if (intern.rewards && intern.rewards.length > 0) {
+                    // Find the highest threshold reward that's unlocked
+                    for (let i = ALL_REWARDS.length - 1; i >= 0; i--) {
+                        if (intern.rewards.includes(ALL_REWARDS[i].name)) {
+                            currentReward = ALL_REWARDS[i].name;
+                            break;
+                        }
+                    }
+                }
+                
+                ALL_REWARDS.forEach(reward => {
+                    const isUnlocked = intern.rewards && intern.rewards.includes(reward.name);
+                    const isCurrent = currentReward === reward.name;
+                    const isPast = isUnlocked && !isCurrent;
+                    
+                    const rewardItem = document.createElement('div');
+                    rewardItem.className = `reward-item ${isCurrent ? 'current' : ''} ${isPast ? 'past' : ''}`;
+                    
+                    rewardItem.innerHTML = `
+                        <div class="reward-icon">
+                            <i class="${reward.icon}"></i>
+                        </div>
+                        <div class="reward-content">
+                            <h4>${reward.name}</h4>
+                            <p>${isCurrent ? 'Current Reward' : (isPast ? 'Unlocked' : `Unlock at $${reward.threshold}`)}</p>
+                        </div>
+                    `;
+                    
+                    rewardsList.appendChild(rewardItem);
+                });
+                
+                // Update next reward section
+                if (intern.nextReward) {
+                    nextRewardContainer.style.display = 'block';
+                    nextRewardText.textContent = intern.nextReward;
+                    
+                    // Calculate progress
+                    const currentLevel = Math.floor(intern.donationsRaised / 750);
+                    const currentLevelAmount = currentLevel * 750;
+                    const nextLevelAmount = intern.nextRewardAmount;
+                    const progress = ((intern.donationsRaised - currentLevelAmount) / (nextLevelAmount - currentLevelAmount)) * 100;
+                    
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `$${intern.donationsRaised.toLocaleString()} / $${nextLevelAmount.toLocaleString()}`;
+                } else {
+                    nextRewardContainer.style.display = 'none';
+                }
+                
+                // Show/hide edit button based on whether we're viewing current user
+                if (intern.id === currentUser.id) {
+                    editReferralBtn.style.display = 'block';
+                    viewingIndicator.classList.remove('active');
+                } else {
+                    editReferralBtn.style.display = 'none';
+                    viewingIndicator.classList.add('active');
+                    viewingInternName.textContent = intern.name;
+                }
+            }
+            
+            function updateLeaderboard() {
+                const leaderboardTable = document.getElementById('leaderboardTable');
+                const tbody = leaderboardTable.querySelector('tbody');
+                tbody.innerHTML = '';
+                
+                // Sort interns by donations (descending)
+                const sortedInterns = [...interns].sort((a, b) => b.donationsRaised - a.donationsRaised);
+                
+                sortedInterns.forEach((intern, index) => {
+                    const row = document.createElement('tr');
+                    if (index < 3) {
+                        row.classList.add(`rank-${index + 1}`);
+                    }
+                    
+                    // Store intern ID in data attribute for click handling
+                    row.setAttribute('data-intern-id', intern.id);
+                    
+                    row.innerHTML = `
+                        <td>
+                            <div class="rank-badge">${index + 1}</div>
+                        </td>
+                        <td>${intern.name} ${intern.id === currentUser.id ? '(You)' : ''}</td>
+                        <td>$${intern.donationsRaised.toLocaleString()}</td>
+                        <td>${intern.university}</td>
+                        <td>${intern.rewards && intern.rewards.length > 0 ? intern.rewards[intern.rewards.length - 1] || 'None' : 'None'}</td>
+                    `;
+                    
+                    // Add click event to show intern details
+                    row.addEventListener('click', () => showInternStats(intern.id));
+                    
+                    tbody.appendChild(row);
+                });
+            }
+            
+            function filterLeaderboard() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const rows = document.querySelectorAll('#leaderboardTable tbody tr');
+                
+                rows.forEach(row => {
+                    const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const university = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || university.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            function sortLeaderboard() {
+                const sortBy = sortSelect.value;
+                const tbody = document.querySelector('#leaderboardTable tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                // Sort rows based on selected criteria
+                rows.sort((a, b) => {
+                    let aValue, bValue;
+                    
+                    switch (sortBy) {
+                        case 'name':
+                            aValue = a.querySelector('td:nth-child(2)').textContent;
+                            bValue = b.querySelector('td:nth-child(2)').textContent;
+                            return aValue.localeCompare(bValue);
+                        case 'university':
+                            aValue = a.querySelector('td:nth-child(4)').textContent;
+                            bValue = b.querySelector('td:nth-child(4)').textContent;
+                            return aValue.localeCompare(bValue);
+                        case 'donations':
+                        default:
+                            aValue = parseInt(a.querySelector('td:nth-child(3)').textContent.replace(/[$,]/g, ''));
+                            bValue = parseInt(b.querySelector('td:nth-child(3)').textContent.replace(/[$,]/g, ''));
+                            return bValue - aValue; // Descending for donations
+                    }
+                });
+                
+                // Re-append sorted rows
+                rows.forEach(row => tbody.appendChild(row));
+                
+                // Update rank badges
+                rows.forEach((row, index) => {
+                    row.className = '';
+                    if (index < 3) {
+                        row.classList.add(`rank-${index + 1}`);
+                    }
+                    row.querySelector('.rank-badge').textContent = index + 1;
+                });
+            }
+            
+            function showInternStats(internId) {
+                const intern = interns.find(i => i.id === internId);
+                if (!intern) return;
+                
+                viewedIntern = intern;
+                updateDashboard(intern);
+            }
+            
+            function showCurrentUserStats() {
+                if (currentUser) {
+                    viewedIntern = null;
+                    updateDashboard(currentUser);
+                }
+            }
+            
+            async function showReferralModal() {
+                try {
+                    // Get suggestions from server
+                    const suggestions = await getReferralSuggestions();
+                    
+                    // Display suggestions
+                    suggestionsContainer.innerHTML = '';
+                    suggestions.forEach(suggestion => {
+                        const span = document.createElement('span');
+                        span.className = 'suggestion';
+                        span.textContent = suggestion;
+                        span.addEventListener('click', () => {
+                            newReferralInput.value = suggestion;
+                        });
+                        suggestionsContainer.appendChild(span);
+                    });
+                    
+                    // Show modal
+                    referralModal.style.display = 'flex';
+                    newReferralInput.value = '';
+                    referralError.textContent = '';
+                } catch (error) {
+                    console.error('Failed to load referral suggestions:', error);
+                    showToast('Failed to load referral suggestions', 'error');
+                }
+            }
+            
+            function hideReferralModal() {
+                referralModal.style.display = 'none';
+            }
+            
+            async function saveReferralCode() {
+                const newCode = newReferralInput.value.trim();
+                
+                // Validate
+                if (!newCode) {
+                    referralError.textContent = 'Please enter a referral code';
+                    return;
+                }
+                if (newCode.length < 4 || newCode.length > 20) {
+                    referralError.textContent = 'Code must be between 4-20 characters';
+                    return;
+                }
+                
+                try {
+                    // Update referral code on server
+                    const updatedIntern = await updateReferralCode(currentUser.id, newCode);
+                    
+                    // Update local data
+                    currentUser = updatedIntern;
+                    
+                    // Update UI
+                    document.getElementById('referralCode').textContent = newCode;
+                    
+                    // Update interns list
+                    const index = interns.findIndex(i => i.id === currentUser.id);
+                    if (index !== -1) {
+                        interns[index] = updatedIntern;
+                    }
+                    
+                    hideReferralModal();
+                    showToast('Referral code updated successfully', 'success');
+                } catch (error) {
+                    referralError.textContent = error.message;
+                }
+            }
+            
+            // Toast Notification Function
+            function showToast(message, type = 'info') {
+                const toastContainer = document.getElementById('toastContainer');
+                
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                let icon = '';
+                switch (type) {
+                    case 'success':
+                        icon = 'fas fa-check-circle';
+                        break;
+                    case 'error':
+                        icon = 'fas fa-exclamation-circle';
+                        break;
+                    case 'info':
+                    default:
+                        icon = 'fas fa-info-circle';
+                        break;
+                }
+                
+                toast.innerHTML = `
+                    <i class="${icon} toast-icon"></i>
+                    <span>${message}</span>
+                    <button class="toast-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Show toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Auto remove after 5 seconds
+                const timeout = setTimeout(() => {
+                    removeToast(toast);
+                }, 5000);
+                
+                // Remove on click
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    clearTimeout(timeout);
+                    removeToast(toast);
+                });
+            }
+            
+            function removeToast(toast) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>
