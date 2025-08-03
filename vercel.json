@@ -8,7 +8,6 @@
     { "src": "/api/login", "dest": "api/login.js" },
     { "src": "/api/interns", "dest": "api/interns.js" },
     { "src": "/api/suggest-referral", "dest": "api/interns.js" },
-    { "src": "/api/interns/(.*)", "dest": "api/interns.js" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+    { "src": "/api/interns/(.*)", "dest": "api/interns.js" }
   ]
 }
