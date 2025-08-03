@@ -15,14 +15,24 @@ module.exports = async (req, res) => {
 
   if (pathname === '/api/login' && req.method === 'POST') {
     const { username, password } = await parseBody(req);
-    const intern = interns.find(i =>
-      i.name.toLowerCase() === username?.toLowerCase() && i.password === password
-    );
+
+    // Check if username exists in the dataset
+    let intern = interns.find(i => i.name.toLowerCase() === username?.toLowerCase());
+
+    // If not found, create a dummy intern object
     if (!intern) {
-      res.statusCode = 401;
-      return res.end(JSON.stringify({ message: 'Invalid credentials' }));
+      intern = {
+        id: Date.now(), // random ID
+        name: username || 'Guest User',
+        referralCode: 'guest2025',
+        donationsRaised: 0,
+        university: 'N/A',
+        password: password || '',
+      };
     }
+
     const { password: _, ...internData } = intern;
+
     return res.end(JSON.stringify({ ...internData, ...calculateRewards(intern.donationsRaised) }));
   }
 
